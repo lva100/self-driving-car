@@ -1,4 +1,5 @@
 import { Level } from "./level";
+import { lerp } from "./utils"
 
 export class NeutralNetwork {
     constructor(neuronCounts) {
@@ -14,5 +15,26 @@ export class NeutralNetwork {
             outputs=Level.feedForward(outputs,network.levels[i]);
         }
         return outputs;
+    }
+
+    static mutate(network,amount=1){
+        network.levels.forEach(level => {
+            for(let i=0;i<level.biases.length;i++){
+                level.biases[i]=lerp(
+                    level.biases[i],
+                    Math.random()*2-1,
+                    amount
+                )
+            }
+            for(let i=0;i<level.weights.length;i++){
+                for(let j=0;j<level.weights[i].length;j++){
+                    level.weights[i][j]=lerp(
+                        level.weights[i][j],
+                        Math.random()*2-1,
+                        amount
+                    )
+                }
+            }
+        });
     }
 }
